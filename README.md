@@ -8,7 +8,7 @@ Goal of the project is to experiment with various API types, to be up to date wi
 - Kotlin FLow
 - RxJava
 
-For now this project is merely a wrapper around ordinal client SDK API, but usage of the
+For now this project is merely a wrapper around existing client SDK API, but usage of the
 Kotlin FLow is very promising.
 
 ## Example - Load conversation events
