@@ -45,8 +45,4 @@ public class LoadConversationEventsActivityJava extends AppCompatActivity {
         });
 
     }
-
-    private void getConversationEvents(NexmoConversation conversation) {
-
-    }
 }
