@@ -11,6 +11,19 @@ Goal of the project is to experiment with various API types, to be up to date wi
 For now this project is merely a wrapper around existing client SDK API, but usage of the
 Kotlin FLow is very promising.
 
+It would be nice to have multiple APIs and extract them into separate dependencies.
+
+```
+implementation 'com.nexmo.android:client-sdk-core:x.y.z' // All below dependencies depend on core
+
+implementation 'com.nexmo.android:client-sdk-java:x.y.z'
+implementation 'com.nexmo.android:client-sdk-livedata:x.y.z'
+implementation 'com.nexmo.android:client-sdk-kotlin-callback:x.y.z'
+implementation 'com.nexmo.android:client-sdk-kotlin-coroutine:x.y.z'
+implementation 'com.nexmo.android:client-sdk-kotlin-flow:x.y.z'
+implementation 'com.nexmo.android:client-sdk-kotlin-rxJava:x.y.z'
+```
+
 ## Example - Load conversation events
 
 Current approach:
