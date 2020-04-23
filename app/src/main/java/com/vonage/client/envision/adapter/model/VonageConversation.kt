@@ -6,7 +6,11 @@ import com.nexmo.client.NexmoEventsPage
 import com.nexmo.client.NexmoPageOrder
 import com.nexmo.client.request_listener.NexmoApiError
 import com.nexmo.client.request_listener.NexmoRequestListener
+import com.vonage.client.envision.adapter.VonageClientException
 import com.vonage.client.envision.adapter.result.GetConversationEventsResult
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -24,6 +28,24 @@ class VonageConversation(private val conversation: NexmoConversation) {
 
             override fun onError(apiError: NexmoApiError) {
                 continuation.resume(GetConversationEventsResult.Error(VonageApiError(apiError)))
+            }
+        })
+    }
+
+    @ExperimentalCoroutinesApi
+    fun getEventsFlow(
+        @IntRange(from = 1L, to = 100L) pageSize: Int,
+        order: NexmoPageOrder = NexmoPageOrder.NexmoMPageOrderAsc,
+        eventType: String? = null
+    ): Flow<VonageEventsPage> = callbackFlow {
+        conversation.getEvents(pageSize, order, eventType, object : NexmoRequestListener<NexmoEventsPage> {
+            override fun onSuccess(nexmoEventsPage: NexmoEventsPage?) {
+                offer(VonageEventsPage(nexmoEventsPage!!))
+            }
+
+            override fun onError(apiError: NexmoApiError) {
+                val clientException = VonageClientException(VonageApiError(apiError))
+                close(clientException)
             }
         })
     }

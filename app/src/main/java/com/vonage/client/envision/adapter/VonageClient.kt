@@ -9,6 +9,9 @@ import com.nexmo.utils.logger.ILogger
 import com.vonage.client.envision.adapter.model.VonageApiError
 import com.vonage.client.envision.adapter.model.VonageConversation
 import com.vonage.client.envision.adapter.result.GetConversationResult
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -67,6 +70,25 @@ object VonageClient {
 
                 override fun onError(apiError: NexmoApiError) {
                     continuation.resume(GetConversationResult.Error(VonageApiError(apiError)))
+                }
+            })
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    fun getConversationFlow(conversationId: String): Flow<VonageConversation> {
+        verifyInitialized()
+
+        return callbackFlow {
+            nexmoClient?.getConversation(conversationId, object : NexmoRequestListener<NexmoConversation> {
+
+                override fun onSuccess(conversation: NexmoConversation?) {
+                    offer(VonageConversation(conversation!!))
+                }
+
+                override fun onError(apiError: NexmoApiError) {
+                    val clientException = VonageClientException(VonageApiError(apiError))
+                    close(clientException)
                 }
             })
         }

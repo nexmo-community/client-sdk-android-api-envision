@@ -8,11 +8,10 @@ import com.vonage.client.envision.adapter.VonageClient
 import com.vonage.client.envision.adapter.model.VonageConversation
 import com.vonage.client.envision.adapter.result.GetConversationEventsResult
 import com.vonage.client.envision.adapter.result.GetConversationResult
-
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity() {
+class LoadConversattionEventsCoroutines : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,9 +19,19 @@ class MainActivity : AppCompatActivity() {
 
         val client = VonageClient.instance
 
+
         lifecycleScope.launch {
             when (val conversationResult = client.getConversation("CONVERSATION_ID")) {
-                is GetConversationResult.Success -> getConversationEvents(conversationResult.conversation)
+                is GetConversationResult.Success -> {
+                    when (val eventsResult = conversationResult.conversation.getEvents(100)) {
+                        is GetConversationEventsResult.Success -> {
+                            eventsResult.page.data
+                        }
+                        is GetConversationEventsResult.Error -> {
+                            Timber.d("Unable to load conversation events ${eventsResult.apiError.message}")
+                        }
+                    }
+                }
                 is GetConversationResult.Error -> Timber.d("Unable to load conversation ${conversationResult.apiError.message}")
             }
         }
