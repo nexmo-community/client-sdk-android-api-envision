@@ -19,4 +19,4 @@ Current approach:
 
 Envisioned approach:
 - [Kotlin Coroutines](app/src/main/java/com/vonage/client/envision/app/LoadConversattionEventsCoroutines.kt)
-- [Kotlin FLow](app/src/main/java/com/vonage/client/envision/app/LoadConversattionEventsFlow.kt)
+- [Kotlin Fow](app/src/main/java/com/vonage/client/envision/app/LoadConversattionEventsFlow.kt)
