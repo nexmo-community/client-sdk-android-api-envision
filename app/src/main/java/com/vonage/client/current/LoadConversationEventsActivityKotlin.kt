@@ -21,7 +21,6 @@ class LoadConversationEventsActivityKotlin : AppCompatActivity() {
         val client = NexmoClient.get()
         client.login("JWT token")
 
-
         client.getConversation("CONVERSATION_ID", object : NexmoRequestListener<NexmoConversation> {
             override fun onSuccess(conversation: NexmoConversation?) {
                 Timber.d("Conversation loaded")
